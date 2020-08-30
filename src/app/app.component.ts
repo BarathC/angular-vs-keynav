@@ -1,5 +1,5 @@
 import { Component, VERSION } from '@angular/core';
-import { FakeuserService } from './app-services/fake-user-service';
+import { FakeuserService,UserDetails } from './app-services/fake-user-service';
 
 @Component({
   selector: 'my-app',
@@ -7,10 +7,13 @@ import { FakeuserService } from './app-services/fake-user-service';
   styleUrls: [ './app.component.css' ]
 })
 export class AppComponent  {
-  name = 'Angular ' + VERSION.major;
-  public oUserArr:any;
+  public oUserArr:UserDetails[] = [];
   
   constructor(private oUserSrv: FakeuserService){
+   
+  }
+
+  public ngOnInit() {
     this.oUserArr = this.oUserSrv.fnGetItems();
   }
 }

@@ -31,13 +31,14 @@ export class FakeuserService {
   private oUserDetails:UserDetails[] = [];
   public fnGetItems():UserDetails[] {
     this.oUserDetails = Array.from({ length: 10 }, () => (
-      faker.helpers.createCard()
+      faker.helpers.contextualCard()
     ));
-    this.oUserDetails = faker.helpers
-    return;
+    return this.oUserDetails;
   }
 
   public fnPaginateUserDetails(): void {
-
+    for( let i = 0; i<10; i++){
+      this.oUserDetails.push(faker.helpers.contextualCard());
+    }
   }
 }
