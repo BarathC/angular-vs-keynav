@@ -1,0 +1,19 @@
+.defaultitemlayout {
+    display: block;
+    height: 55px;
+    padding: 0 4px;
+}
+
+/* styles for virtual scroll component*/
+.verticallist-container{
+   height:100%;
+   width:100%;
+
+}
+
+.verticallist-selectable {
+  height: 100%;
+  display: block;
+   position: relative;
+    outline: none; 
+}

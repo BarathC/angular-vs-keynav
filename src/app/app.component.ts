@@ -7,13 +7,10 @@ import { FakeuserService,UserDetails } from './app-services/fake-user-service';
   styleUrls: [ './app.component.css' ]
 })
 export class AppComponent  {
-  public oUserArr:UserDetails[] = [];
-  
   constructor(private oUserSrv: FakeuserService){
    
   }
 
   public ngOnInit() {
-    this.oUserArr = this.oUserSrv.fnGetItems();
   }
 }

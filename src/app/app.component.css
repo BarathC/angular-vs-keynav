@@ -1,3 +1,8 @@
 p {
   font-family: Lato;
 }
+
+:host {
+  display: block;
+  height: 500px;
+}

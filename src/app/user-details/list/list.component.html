@@ -1,0 +1,10 @@
+<!-- Pass input array to virtual scroll component
+vsUpdate event emits visible items, vsEnd event emits every time user scrolls
+refer https://github.com/rintoj/ngx-virtual-scroller-->
+<div tabindex="-1" (keyup)="efnOnKeyUp($event)" class="verticallist-selectable">
+  <virtual-scroller class="verticallist-container" [items]="oImDmItemidArr" (vsUpdate)="efnGetViewPortItems($event)"
+    (vsEnd)="efnGetNextBatch($event)">
+        <app-nameitem *ngFor="let oItemId of oVisibleImDmItemidArr" [oItem]="oItemId" class='defaultitemlayout'>
+        </app-nameitem>
+  </virtual-scroller>
+</div>

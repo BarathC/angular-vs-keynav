@@ -1,5 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 import faker from 'faker';
+import {Subject, Observable} from 'rxjs';
 export interface UserDetails {
   name:string;
   username: string;
@@ -29,10 +30,17 @@ export interface Company {
 export class FakeuserService {
 
   private oUserDetails:UserDetails[] = [];
+  private oSelectedItem:UserDetails = null;
+  private oSelectedItemChanged:Subject<void> = new Subject<void>();
+  public obsSelectedItemChanged: Observable<void> = null;
+  constructor(){
+    this.obsSelectedItemChanged = this.oSelectedItemChanged.asObservable();
+  }
   public fnGetItems():UserDetails[] {
     this.oUserDetails = Array.from({ length: 10 }, () => (
       faker.helpers.contextualCard()
     ));
+    this.oSelectedItem = this.oUserDetails[0];
     return this.oUserDetails;
   }
 
@@ -40,5 +48,15 @@ export class FakeuserService {
     for( let i = 0; i<10; i++){
       this.oUserDetails.push(faker.helpers.contextualCard());
     }
+  }
+
+  public fnGetSelectedItem(): UserDetails {
+    return this.oSelectedItem;
+  }
+
+  public fnSetSelectedItem(oItemIn: UserDetails): void {
+    this.oSelectedItem = oItemIn;
+    this.oSelectedItemChanged.next();
+
   }
 }

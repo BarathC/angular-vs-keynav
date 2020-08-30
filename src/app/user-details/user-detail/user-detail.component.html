@@ -1,0 +1,15 @@
+<mat-card class="example-card">
+	<mat-card-header>
+		<div mat-card-avatar [ngStyle]="{ 'background-image': 'url(' + oSelectedItem.avatar + ')'}"
+			class="example-header-image"></div>
+		<mat-card-title>{{oSelectedItem.name}}</mat-card-title>
+		<mat-card-subtitle>{{oSelectedItem.username}}</mat-card-subtitle>
+	</mat-card-header>
+	<mat-card-content>
+		<mat-list role="list">
+			<mat-list-item role="listitem">Email: {{oSelectedItem.email}}</mat-list-item>
+			<mat-list-item role="listitem">Phone: {{oSelectedItem.phone}}</mat-list-item>
+			<mat-list-item role="listitem">Website: {{oSelectedItem.website}}</mat-list-item>
+		</mat-list>
+	</mat-card-content>
+</mat-card>
