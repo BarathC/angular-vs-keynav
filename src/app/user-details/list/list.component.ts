@@ -20,31 +20,14 @@ export class ListComponent implements OnInit {
   @ViewChildren(NameitemComponent)
   private oListItems: QueryList<NameitemComponent>;
 
-  /**
-   * This variable holds the list of items that builds the
-   * templates within the virtual scroll.
-   *
-   * @type {Array<UserDetails>}
-   * @memberof ImIlImVerticallistComponent
-   */
-  public oImDmItemidArr: Array<UserDetails>;
+  public oUserDetailsArr: Array<UserDetails>;
 
-  /**
-   * This variable holds the visible items of view port
-   *
-   * @type {Array<UserDetails>}
-   * @memberof ImIlImVerticallistComponent
-   */
-  public oVisibleImDmItemidArr: Array<UserDetails>;
 
-  //Boolean to decide whether to get next batch of items
+  public oVisibleUserDetailsArr: Array<UserDetails>;
+
   private bGetNextBatch: boolean;
 
-  //Boolean to decide whether to get prev batch of items
-  private bGetPrevBatch: boolean;
-
-  //To tell how many keydown event been fired before keyup event been fired
-  private nCountKeyDown: number; // Added by LXY
+  private nCountKeyDown: number;
 
   // #endregion variable
 
@@ -69,20 +52,16 @@ export class ListComponent implements OnInit {
   //#region Methods
 
   public efnGetViewPortItems(oViewPortItemsArr: Array<UserDetails>): void {
-    this.oVisibleImDmItemidArr = oViewPortItemsArr;
+    this.oVisibleUserDetailsArr = oViewPortItemsArr;
   }
 
   /**
    *This event gets triggered in the following cases
    *  - When there are no items in view port.
    *  - When scrollbar reaches the end of the list.
-   *
-   * @param {ChangeEvent} oEvent
-   * @returns {void}
-   * @memberof ImIlImVerticallistComponent
    */
   public efnGetNextBatch(oEvent: IPageInfo): void {
-    if (oEvent.endIndex === this.oImDmItemidArr.length - 1) {
+    if (oEvent.endIndex === this.oUserDetailsArr.length - 1) {
       this.oUserDetailSrv.fnPaginateUserDetails();
     }
   }
@@ -90,17 +69,13 @@ export class ListComponent implements OnInit {
 
   /**
    * Function to handle key up event
-   *
-   * @param {KeyboardEvent} oEvent
-   * @returns {void}
-   * @memberof ImIlImVerticallistComponent
-   */
+    */
   public efnOnKeyUp(oEvent: KeyboardEvent): void {
-    if (this.nCountKeyDown > 1) { // Added by LXY
+    if (this.nCountKeyDown > 1) {
       this.nCountKeyDown = 0;
       return;
     }
-    this.nCountKeyDown = 0; // Added by LXY
+    this.nCountKeyDown = 0;
 
     //Get Selected Item
     const oSelectedItem: UserDetails = this.oUserDetailSrv.fnGetSelectedItem();
@@ -109,11 +84,11 @@ export class ListComponent implements OnInit {
       let nItemSelectorIndex: number = 0
       let bScroll: boolean = false;
       //Set item padding count to half of visible items
-      let nPaddingItemCount: number = Math.round(this.oVisibleImDmItemidArr.length / ImUtClConstants.nItemListScrollPaddingFactor);
+      let nPaddingItemCount: number = Math.round(this.oVisibleUserDetailsArr.length / ImUtClConstants.nItemListScrollPaddingFactor);
       //Get index of selected item in item id array
-      let nIndexofItem: number = this.oImDmItemidArr.findIndex((oImDmItemId: UserDetails): boolean => (oImDmItemId.username === oSelectedItem.username));
+      let nIndexofItem: number = this.oUserDetailsArr.findIndex((oImDmItemId: UserDetails): boolean => (oImDmItemId.username === oSelectedItem.username));
       //Get index of item in visible item array
-      let nIndexOfVisibleItem: number = this.oVisibleImDmItemidArr.findIndex((oImDmItemId: UserDetails): boolean => (oImDmItemId.username === oSelectedItem.username));
+      let nIndexOfVisibleItem: number = this.oVisibleUserDetailsArr.findIndex((oImDmItemId: UserDetails): boolean => (oImDmItemId.username === oSelectedItem.username));
       if (nIndexOfVisibleItem === -1) {
         this.fnScrollToTheSelectedItem();
         return;
@@ -130,10 +105,10 @@ export class ListComponent implements OnInit {
       }
       if (oEvent.key === ImUtClConstants.sDownArrowKey) {
         //Return if selected item is the last item
-        if (nIndexofItem === this.oImDmItemidArr.length - 1)
+        if (nIndexofItem === this.oUserDetailsArr.length - 1)
           return;
         //Trigger scroll if we reach the bottom of visible item list
-        if (nIndexOfVisibleItem === this.oVisibleImDmItemidArr.length - 1 || nIndexOfVisibleItem === this.oVisibleImDmItemidArr.length - 2) {
+        if (nIndexOfVisibleItem === this.oVisibleUserDetailsArr.length - 1 || nIndexOfVisibleItem === this.oVisibleUserDetailsArr.length - 2) {
           bScroll = true;
         }
         nItemSelectorIndex = 1;
@@ -150,14 +125,13 @@ export class ListComponent implements OnInit {
       const oNextActiveItem: NameitemComponent = oVisibleItemComponentList[nIndexOfVisibleItem + nItemSelectorIndex];
       if (!!oNextActiveItem) {
         oNextActiveItem.fnClicked();
-        // oNextActiveItem.fnSetItemAsRead();
       }
     }
   }
   // Initialise public members and validate input
   private fnInitializeAndValidateInput(): void {
-    this.oImDmItemidArr = new Array<UserDetails>();
-    this.oVisibleImDmItemidArr = new Array<UserDetails>();
+    this.oUserDetailsArr = new Array<UserDetails>();
+    this.oVisibleUserDetailsArr = new Array<UserDetails>();
     this.bGetNextBatch = true;
     this.nCountKeyDown = 0;
   }
@@ -165,9 +139,9 @@ export class ListComponent implements OnInit {
   //Function to update vertical  list data
   private fnUpdateVerticalListData(): void {
     //Get item array
-    this.oImDmItemidArr = this.oUserDetailSrv.fnGetItems();
-    if (this.oImDmItemidArr === null || this.oImDmItemidArr === undefined)
-      this.oImDmItemidArr = new Array<UserDetails>();
+    this.oUserDetailsArr = this.oUserDetailSrv.fnGetItems();
+    if (this.oUserDetailsArr === null || this.oUserDetailsArr === undefined)
+      this.oUserDetailsArr = new Array<UserDetails>();
 
 
   }
@@ -187,11 +161,9 @@ export class ListComponent implements OnInit {
     if (sSelectedItemId === null || sSelectedItemId === undefined)
       return;
 
-    const nIndexInViewPortArr: number = this.oVisibleImDmItemidArr.findIndex((oImDmItemId: UserDetails): boolean => (oImDmItemId.username === sSelectedItemId));
+    const nIndexInViewPortArr: number = this.oVisibleUserDetailsArr.findIndex((oImDmItemId: UserDetails): boolean => (oImDmItemId.username === sSelectedItemId));
     if (nIndexInViewPortArr === -1) {
-      let nSelectedItemIndex: number = this.oImDmItemidArr.findIndex((oImDmItemId: UserDetails): boolean => (oImDmItemId.username === sSelectedItemId));
-      //This condition is needed, as we are allowing selecting an item which is not in the array list.
-      //This happens when we click on notification item, while seeing calendar items
+      let nSelectedItemIndex: number = this.oUserDetailsArr.findIndex((oImDmItemId: UserDetails): boolean => (oImDmItemId.username === sSelectedItemId));
       if (nSelectedItemIndex === -1)
         return;
 
