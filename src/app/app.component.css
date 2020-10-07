@@ -2,7 +2,9 @@ p {
   font-family: Lato;
 }
 
-:host {
-  display: block;
-  height: 500px;
+:host{
+  display:grid;
+  height:100%;
+  width:100%;
+  grid-template-rows: min-content 1fr;
 }
